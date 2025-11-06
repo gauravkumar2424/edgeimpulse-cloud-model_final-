@@ -1,0 +1,19 @@
+[
+    "Vibration_RMS",
+    "Vibration_Peak",
+    "Vibration_Kurtosis",
+    "Vibration_PeakFreq",
+    "Temperature_Mean",
+    "Temperature_Rate",
+    "Current_Variance",
+    "Current_SurgeCount",
+    "Sound_Energy",
+    "Humidity_Mean",
+    "Humidity_Variance",
+    "TTF_Trend",
+    "Vibration_Slope",
+    "Temperature_Slope",
+    "Vibration_Change",
+    "Is_Recovery",
+    "temp_abnormal_duration"
+]

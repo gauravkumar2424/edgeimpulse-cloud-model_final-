@@ -1,0 +1,23 @@
+2025-11-06 01:48:31.258268: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-11-06 01:48:34,043 - INFO - Loading scaler...
+2025-11-06 01:48:34,055 - INFO - Loading cloud model...
+2025-11-06 01:48:34.060973: E external/local_xla/xla/stream_executor/cuda/cuda_platform.cc:51] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
+2025-11-06 01:48:34,219 - INFO - Loading label encoder...
+2025-11-06 01:48:34,221 - INFO - 🤖 Jarvis Cloud Model API running...
+ * Serving Flask app 'cloud_api'
+ * Debug mode: off
+Address already in use
+Port 5000 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Traceback (most recent call last):
+  File "/root/DSA/edgeimpulse/CLOUD_MODEL/cloud_api.py", line 8, in <module>
+    from flask_cors import CORS
+ModuleNotFoundError: No module named 'flask_cors'
+2025-11-06 01:59:37.113907: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-11-06 01:59:41.433980: E external/local_xla/xla/stream_executor/cuda/cuda_platform.cc:51] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
+INFO:JarvisCloudAPI:🤖 Jarvis Cloud Model API running...
+ * Serving Flask app 'cloud_api'
+ * Debug mode: off
+Address already in use
+Port 5000 is in use by another program. Either identify and stop that program, or start the server with a different port.
