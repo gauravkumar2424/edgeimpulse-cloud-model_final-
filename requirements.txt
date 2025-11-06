@@ -2,5 +2,6 @@ flask
 numpy
 tensorflow
 joblib
+scikit-learn
 openai
 gunicorn
