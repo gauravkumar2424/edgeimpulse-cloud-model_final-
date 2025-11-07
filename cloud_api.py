@@ -68,6 +68,7 @@ def home():
         f"POST a single CSV row ({FEATURES_COUNT} comma-separated values, NOT JSON) to /predict for fault diagnosis.\n"
         "Handles raw sensor readings, scales, predicts, and returns text/voice Jarvis analysis.\n"
         "POST plain text to /tts for audio streaming (GPT analysis spoken as MP3).\n"
+        "GET /tts?text=Your%20Text%20Here for streaming MP3 audio of spoken text (for ESP32 audio modules).\n"
     )
 
 @app.route('/predict', methods=['POST'])
@@ -101,22 +102,24 @@ def predict():
         logger.error(f"Prediction error: {e}", exc_info=True)
         return str(e), 500
 
-@app.route('/tts', methods=['POST'])
+@app.route('/tts', methods=['POST', 'GET'])
 def text_to_speech():
     """
-    POST plain text (e.g., the Jarvis GPT analysis) to this endpoint.
-    Response will be an audio/mp3 stream of the spoken text (no file storage).
+    POST: plain text body (Jarvis GPT analysis) --> returns MP3 audio.
+    GET: /tts?text=Your%20Text%20Here --> returns MP3 audio (for ESP32 streaming).
     """
     try:
-        analysis_text = request.data.decode().strip()
+        if request.method == 'POST':
+            analysis_text = request.data.decode().strip()
+        else:  # GET
+            analysis_text = request.args.get('text', '').strip()
         if not analysis_text:
             return "ERROR: No text provided for TTS.", 400
-        # Generate speech using gTTS (Google Text-To-Speech)
+        # Google Text-to-Speech
         tts = gTTS(text=analysis_text, lang='en')
         temp_mp3 = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
         tts.save(temp_mp3.name)
         temp_mp3.close()
-        # Stream as an mp3 file (delete file after send_file automatically)
         return send_file(temp_mp3.name, mimetype="audio/mpeg")
     except Exception as e:
         logger.error(f"TTS error: {e}", exc_info=True)
