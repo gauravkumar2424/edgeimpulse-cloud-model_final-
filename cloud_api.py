@@ -4,8 +4,10 @@ import joblib
 import numpy as np
 import logging
 import tensorflow as tf
-from flask import Flask, request
+from flask import Flask, request, send_file
 import openai
+import tempfile
+from gtts import gTTS
 
 # =========================== CONFIG ===========================
 MODEL_PATH = "./cloud_model.keras"
@@ -65,6 +67,7 @@ def home():
         "Cloud Model Online.\n"
         f"POST a single CSV row ({FEATURES_COUNT} comma-separated values, NOT JSON) to /predict for fault diagnosis.\n"
         "Handles raw sensor readings, scales, predicts, and returns text/voice Jarvis analysis.\n"
+        "POST plain text to /tts for audio streaming (GPT analysis spoken as MP3).\n"
     )
 
 @app.route('/predict', methods=['POST'])
@@ -96,6 +99,27 @@ def predict():
         return results, 200
     except Exception as e:
         logger.error(f"Prediction error: {e}", exc_info=True)
+        return str(e), 500
+
+@app.route('/tts', methods=['POST'])
+def text_to_speech():
+    """
+    POST plain text (e.g., the Jarvis GPT analysis) to this endpoint.
+    Response will be an audio/mp3 stream of the spoken text (no file storage).
+    """
+    try:
+        analysis_text = request.data.decode().strip()
+        if not analysis_text:
+            return "ERROR: No text provided for TTS.", 400
+        # Generate speech using gTTS (Google Text-To-Speech)
+        tts = gTTS(text=analysis_text, lang='en')
+        temp_mp3 = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
+        tts.save(temp_mp3.name)
+        temp_mp3.close()
+        # Stream as an mp3 file (delete file after send_file automatically)
+        return send_file(temp_mp3.name, mimetype="audio/mpeg")
+    except Exception as e:
+        logger.error(f"TTS error: {e}", exc_info=True)
         return str(e), 500
 
 if __name__ == "__main__":
